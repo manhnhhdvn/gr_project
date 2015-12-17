@@ -48,7 +48,6 @@ Wavefront::~Wavefront() {
 
 void Wavefront::initialize(CellPtr _start, CellPtr _goal, double robot_size) {
   this->robot_size = robot_size;
-  cout << "1" << endl;
   int world[MAP_X][MAP_Y] = { { 0, X, X, 0, 0, 0, 0, 0 }, { 0, X, X, 0, 0, 0, 0,
       0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0,
       0, 0, 0, 0 }, { 0, 0, 0, 0, X, 0, 0, 0 }, { 0, 0, 0, X, X, X, 0, 0 }, { 0,
@@ -61,17 +60,16 @@ void Wavefront::initialize(CellPtr _start, CellPtr _goal, double robot_size) {
     }
     WORLD_MAP.push_back(tmp);
   }
-  cout << "2" << endl;
 
   start = _start;
   goal = _goal;
-  cout << "3" << endl;
   WORLD_MAP[goal->get_center()->x][goal->get_center()->y] = GOAL;
 }
 
 void Wavefront::cover() {
   wave_fill();
   path_planning();
+  cout << "1" << endl;
 
   CellPtr current = start;
   CellPtr next_cell;
@@ -124,11 +122,13 @@ void Wavefront::wave_fill() {
   CellPtr next_cell, visiting_cell;
 
   next_cell = goal;
+  cout << "4" << endl;
   wave.push(next_cell);
   while (!wave.empty()) {
     visiting_cell = wave.front();
     wave.pop();
-    current_score = get_cell_value(visiting_cell) + 1;
+    current_score = get_cell_value(visiting_cell->get_center()->x,
+        visiting_cell->get_center()->y) + 1;
 
     // 8-directions version
     // 0 0 0
@@ -136,90 +136,91 @@ void Wavefront::wave_fill() {
     // 0 0 0
 
     // 1st row
-    next_cell->get_center()->x = visiting_cell->get_center()->x - 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y - 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    int x, y;
+
+    x = visiting_cell->get_center()->x - 1;
+    y = visiting_cell->get_center()->y - 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
-    next_cell->get_center()->x = visiting_cell->get_center()->x;
-    next_cell->get_center()->y = visiting_cell->get_center()->y - 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x;
+    y = visiting_cell->get_center()->y - 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
-    next_cell->get_center()->x = visiting_cell->get_center()->x + 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y - 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x + 1;
+    y = visiting_cell->get_center()->y - 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
     // 2nd row
-    next_cell->get_center()->x = visiting_cell->get_center()->x - 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x - 1;
+    y = visiting_cell->get_center()->y;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
-    next_cell->get_center()->x = visiting_cell->get_center()->x + 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x + 1;
+    y = visiting_cell->get_center()->y;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
     // 3rd row
-    next_cell->get_center()->x = visiting_cell->get_center()->x - 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y + 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x - 1;
+    y = visiting_cell->get_center()->y + 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
-    next_cell->get_center()->x = visiting_cell->get_center()->x;
-    next_cell->get_center()->y = visiting_cell->get_center()->y + 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x;
+    y = visiting_cell->get_center()->y + 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
 
-    next_cell->get_center()->x = visiting_cell->get_center()->x + 1;
-    next_cell->get_center()->y = visiting_cell->get_center()->y + 1;
-    if (check_coordinate(next_cell)
-        == true&& get_cell_value(next_cell) == UNVISITED) {
+    x = visiting_cell->get_center()->x + 1;
+    y = visiting_cell->get_center()->y + 1;
+    next_cell->set_center(PointPtr(new Point(x, y)));
+    if (check_coordinate(x, y) == true && get_cell_value(x, y) == UNVISITED) {
       WORLD_MAP[next_cell->get_center()->x][next_cell->get_center()->y] =
           current_score;
       wave.push(next_cell);
     }
   }
+  cout << "3" << endl;
 }
 
-bool Wavefront::check_coordinate(CellPtr input) {
-  return !((input->get_center()->x < 0 || input->get_center()->y < 0
-      || input->get_center()->x > (MAP_X - 1)
-      || input->get_center()->y > (MAP_Y - 1)));
+bool Wavefront::check_coordinate(int x, int y) {
+  return !((x < 0 || y < 0 || x > (MAP_X - 1) || y > (MAP_Y - 1)));
 }
 
-int Wavefront::get_cell_value(CellPtr input) {
-  return WORLD_MAP[input->get_center()->x][input->get_center()->y];
+int Wavefront::get_cell_value(int x, int y) {
+  return WORLD_MAP[x][y];
 }
 
 /***** 2nd Stage - Coverage path generate *****/
@@ -230,6 +231,7 @@ void Wavefront::path_planning() {
   CellPtr next;
   do {
     next = get_next_hop(current);
+    cout << next->get_center()->x << " " << next->get_center()->y << endl;
     if (next->get_center()->x == -1 && next->get_center()->y == -1) {
       // go back to previous
       next = trajectory.top();
@@ -237,6 +239,7 @@ void Wavefront::path_planning() {
     } else {
       trajectory.push(current);
     }
+    cout << "6" << endl;
 
     path.push(next);
     WORLD_MAP[current->get_center()->x][current->get_center()->y] = VISITED;
@@ -245,66 +248,69 @@ void Wavefront::path_planning() {
 }
 
 CellPtr Wavefront::get_next_hop(CellPtr current) {
+  cout << "5" << endl;
   CellPtr next, tmp;
-  next->get_center()->x = -1;
-  next->get_center()->y = -1;
+  next = CellPtr(new Cell(PointPtr(new Point(-1, -1)), robot_size));
   int max_score = 1;
 
-  tmp->get_center()->x = current->get_center()->x - 1;
-  tmp->get_center()->y = current->get_center()->y;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  int x, y;
+
+  x = current->get_center()->x - 1;
+  y = current->get_center()->y;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x - 1;
-  tmp->get_center()->y = current->get_center()->y - 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x - 1;
+  y = current->get_center()->y - 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x;
-  tmp->get_center()->y = current->get_center()->y - 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x;
+  y = current->get_center()->y - 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x + 1;
-  tmp->get_center()->y = current->get_center()->y - 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x + 1;
+  y = current->get_center()->y - 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x + 1;
-  tmp->get_center()->y = current->get_center()->y;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x + 1;
+  y = current->get_center()->y;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x + 1;
-  tmp->get_center()->y = current->get_center()->y + 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x + 1;
+  y = current->get_center()->y + 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x;
-  tmp->get_center()->y = current->get_center()->y + 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x;
+  y = current->get_center()->y + 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
 
-  tmp->get_center()->x = current->get_center()->x - 1;
-  tmp->get_center()->y = current->get_center()->y + 1;
-  if (check_coordinate(tmp) == true && get_cell_value(tmp) > max_score) {
-    max_score = get_cell_value(tmp);
-    next = tmp;
+  x = current->get_center()->x - 1;
+  y = current->get_center()->y + 1;
+  if (check_coordinate(x, y) == true && get_cell_value(x, y) > max_score) {
+    max_score = get_cell_value(x, y);
+    next->set_center(PointPtr(new Point(x, y)));
   }
+  cout << "5.5" << endl;
 
   return next;
 }

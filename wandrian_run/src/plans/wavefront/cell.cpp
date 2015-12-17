@@ -32,12 +32,16 @@ double Cell::get_size() {
   return size;
 }
 
-void Cell::set_parent(CellPtr parent) {
-  this->parent = parent;
-}
-
 CellPtr Cell::get_parent() {
   return parent;
+}
+
+void Cell::set_center(PointPtr center) {
+  this->center = center;
+}
+
+void Cell::set_parent(CellPtr parent) {
+  this->parent = parent;
 }
 
 }

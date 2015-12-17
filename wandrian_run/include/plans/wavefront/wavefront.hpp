@@ -51,8 +51,8 @@ private:
   double robot_size;
 
   void wave_fill();
-  bool check_coordinate(CellPtr);
-  int get_cell_value(CellPtr);
+  bool check_coordinate(int, int);
+  int get_cell_value(int, int);
 
   void path_planning();
   CellPtr get_next_hop(CellPtr);
