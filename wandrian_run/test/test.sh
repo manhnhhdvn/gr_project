@@ -13,12 +13,14 @@ g++ -c environment.cpp
 cd ../plans
 g++ -c base_plan.cpp
 
-cd spiral_stc
+cd wavefront
 g++ -c cell.cpp
-g++ -c spiral_stc.cpp
+g++ -c wavefront.cpp
 
 cd ../..
-g++ -o ../wandrian_run ../../test.cpp common/point.o common/vector.o common/segment.o common/polygon.o common/environment.o plans/base_plan.o plans/spiral_stc/cell.o plans/spiral_stc/spiral_stc.o -lglut -lGL
+g++ -o ../wandrian_run ../../test.cpp \
+common/point.o common/vector.o common/segment.o common/polygon.o common/environment.o \
+plans/base_plan.o plans/wavefront/cell.o plans/wavefront/wavefront.o -lglut -lGL
 cd ..
 clear
 clear

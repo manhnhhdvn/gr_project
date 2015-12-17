@@ -30,15 +30,23 @@ void Wandrian::spin() {
 }
 
 void Wandrian::wandrian_run() {
-  if (core.get_plan_name() == "spiral_stc") {
-    WavefrontPtr spiral_stc = WavefrontPtr(new Wavefront());
-    spiral_stc->initialize(
-        Cell(core.get_starting_point_x(), core.get_starting_point_y()),
-        Cell(core.get_starting_point_x(), core.get_starting_point_y()),
+  if (core.get_plan_name() == "wavefront") {
+    WavefrontPtr wavefront = WavefrontPtr(new Wavefront());
+    wavefront->initialize(
+        CellPtr(
+            new Cell(
+                PointPtr(
+                    new Point(core.get_starting_point_x(),
+                        core.get_starting_point_y())), core.get_robot_size())),
+        CellPtr(
+            new Cell(
+                PointPtr(
+                    new Point(core.get_starting_point_x(),
+                        core.get_starting_point_y())), core.get_robot_size())),
         core.get_robot_size());
-    spiral_stc->set_behavior_go_to(
+    wavefront->set_behavior_go_to(
         boost::bind(&Wandrian::spiral_stc_go_to, this, _1, _2));
-    spiral_stc->cover();
+    wavefront->cover();
   }
 }
 

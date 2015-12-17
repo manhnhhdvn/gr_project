@@ -36,26 +36,26 @@ class Wavefront: public BasePlan {
 public:
   Wavefront();
   ~Wavefront();
-  void initialize(Cell, Cell, double);
+  void initialize(CellPtr, CellPtr, double);
   void cover();
 
 protected:
   bool go_to(PointPtr, bool);
-  bool go_by_step(Cell, Cell);
+  bool go_by_step(CellPtr, CellPtr);
 
 private:
   std::vector<std::vector<int> > WORLD_MAP;
-  std::queue<Cell> path;
-  Cell start;
-  Cell goal;
+  std::queue<CellPtr> path;
+  CellPtr start;
+  CellPtr goal;
   double robot_size;
 
   void wave_fill();
-  bool check_coordinate(Cell);
-  int get_cell_value(Cell);
+  bool check_coordinate(CellPtr);
+  int get_cell_value(CellPtr);
 
   void path_planning();
-  Cell get_next_hop(Cell);
+  CellPtr get_next_hop(CellPtr);
 };
 
 typedef boost::shared_ptr<Wavefront> WavefrontPtr;

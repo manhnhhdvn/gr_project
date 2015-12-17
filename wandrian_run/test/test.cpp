@@ -15,19 +15,19 @@
 #include <boost/bind.hpp>
 #include <sstream>
 #include <fstream>
-#include "../include/plans/spiral_stc/spiral_stc.hpp"
+#include "../include/plans/wavefront/wavefront.hpp"
 
 #define R_SIZE 0.5 // Robot size
 #define E_SIZE 4.0 // Default environment size
 #define WORLD_INSERT_OBSTACLE "<!-- INSERT: Bound and Obstacles here -->" // Flag at original world file to insert bound and obstacles into
 
-using namespace wandrian::plans::spiral_stc;
+using namespace wandrian::plans::wavefront;
 
 double e_size = 0;
 
 EnvironmentPtr environment;
 PointPtr starting_point;
-SpiralStcPtr spiral_stc;
+WavefrontPtr wavefront;
 std::list<PointPtr> tmp_path;
 
 /**
@@ -299,13 +299,12 @@ int main(int argc, char **argv) {
   world_out.close();
 
   environment = EnvironmentPtr(new Environment(space, obstacles));
-  spiral_stc = SpiralStcPtr(new SpiralStc());
-  spiral_stc->initialize(starting_point, R_SIZE);
+  wavefront = WavefrontPtr(new Wavefront());
+  wavefront->initialize(CellPtr(new Cell(starting_point, R_SIZE)),
+      CellPtr(new Cell(starting_point, R_SIZE)), R_SIZE);
   tmp_path.insert(tmp_path.end(), starting_point);
-  spiral_stc->set_behavior_go_to(boost::bind(&test_go_to, _1, _2));
-  spiral_stc->set_behavior_see_obstacle(
-      boost::bind(&test_see_obstacle, _1, _2));
-  spiral_stc->cover();
+  wavefront->set_behavior_go_to(boost::bind(&test_go_to, _1, _2));
+  wavefront->cover();
 
   run(argc, argv);
   return 0;
