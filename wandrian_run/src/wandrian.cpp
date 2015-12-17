@@ -6,7 +6,7 @@
  */
 
 #include "../include/wandrian.hpp"
-#include "../include/plans/spiral_stc/spiral_stc.hpp"
+#include "../include/plans/wavefront/wavefront.hpp"
 
 #define CLOCKWISE true
 #define COUNTERCLOCKWISE false
@@ -15,6 +15,8 @@
 #define EPS_ORI_TO_ROTATE 0.06
 #define EPS_ORI_TO_MOVE 4 * EPS_ORI_TO_ROTATE
 #define EPS_POS 0.06
+
+using namespace wandrian::plans::wavefront;
 
 namespace wandrian {
 
@@ -29,15 +31,13 @@ void Wandrian::spin() {
 
 void Wandrian::wandrian_run() {
   if (core.get_plan_name() == "spiral_stc") {
-    SpiralStcPtr spiral_stc = SpiralStcPtr(new SpiralStc());
+    WavefrontPtr spiral_stc = WavefrontPtr(new Wavefront());
     spiral_stc->initialize(
-        PointPtr(
-            new Point(core.get_starting_point_x(),
-                core.get_starting_point_y())), core.get_robot_size());
+        Cell(core.get_starting_point_x(), core.get_starting_point_y()),
+        Cell(core.get_starting_point_x(), core.get_starting_point_y()),
+        core.get_robot_size());
     spiral_stc->set_behavior_go_to(
         boost::bind(&Wandrian::spiral_stc_go_to, this, _1, _2));
-    spiral_stc->set_behavior_see_obstacle(
-        boost::bind(&Wandrian::spiral_stc_see_obstacle, this, _1, _2));
     spiral_stc->cover();
   }
 }

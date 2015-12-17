@@ -10,9 +10,6 @@
 
 #include "common/vector.hpp"
 #include "core.hpp"
-#include "plans/spiral_stc/spiral_stc.hpp"
-
-using namespace wandrian::plans::spiral_stc;
 
 namespace wandrian {
 
