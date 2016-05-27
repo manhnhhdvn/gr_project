@@ -42,8 +42,6 @@ private:
   boost::function<bool(VectorPtr, double)> behavior_see_obstacle;
   std::set<CellPtr, CellComp> old_cells;
   std::set<CellPtr, CellComp> bplist;
-  int check_rotate;
-  bool straight;
   int number_cell;
   int number_neighbor_cell;
   int check_insert;
@@ -66,9 +64,7 @@ private:
   bool see_obstacle(VectorPtr, double);
   bool go_with(VectorPtr, double);
   bool go_with_bpcell(PointPtr, VectorPtr, double);
-  void go_straight(CellPtr, CellPtr, VectorPtr);
-  void turn_left(CellPtr, CellPtr, VectorPtr);
-  void turn_right(CellPtr, CellPtr, VectorPtr);
+  void boustrophedon_move(CellPtr, CellPtr, VectorPtr);
   void bpmove(CellPtr);
   void scan(CellPtr);
   void find_bpcell(CellPtr);
@@ -76,8 +72,8 @@ private:
   void refine_bplist();
   int check_vertex(CellPtr);
   double check_distance(CellPtr, CellPtr);
-  void insert_edge(CellPtr, CellPtr, int);
-  void insert_cell_to_graph(CellPtr, CellPtr, int);
+  void insert_edge(CellPtr, CellPtr, int, double);
+  void insert_cell_to_graph(CellPtr, CellPtr, int, double);
   State state_of(CellPtr);
 };
 
